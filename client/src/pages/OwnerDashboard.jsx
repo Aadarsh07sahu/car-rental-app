@@ -4,15 +4,17 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import AutocompleteInput from '../components/AutocompleteInput';
 import { carBrands, brandNames } from '../data/carData';
+import { API_URL } from '../config';
 
 function OwnerDashboard() {
   const { token, user } = useAuth();
   const [myCars, setMyCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
 
   const [form, setForm] = useState({
-    brand: '', model: '', image: '', year: '', category: 'Hatchback',
+    brand: '', model: '', year: '', category: 'Hatchback',
     seating_capacity: '', fuel_type: 'Petrol', transmission: 'Manual',
     pricePerDay: '', location: '', description: '',
   });
@@ -21,7 +23,7 @@ function OwnerDashboard() {
 
   const fetchMyCars = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/cars/mycars', {
+      const res = await axios.get(`${API_URL}/cars/mycars`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setMyCars(res.data.cars);
@@ -48,19 +50,39 @@ function OwnerDashboard() {
     setForm({ ...form, model: value });
   };
 
+  const handleImageChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!imageFile) {
+      toast.error('Please select an image for the car');
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await axios.post('http://localhost:5000/api/cars/add', form, {
-        headers: { Authorization: `Bearer ${token}` },
+      const formData = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+      formData.append('image', imageFile);
+
+      await axios.post(`${API_URL}/cars/add`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
       });
       toast.success('Car added successfully!');
       setForm({
-        brand: '', model: '', image: '', year: '', category: 'Hatchback',
+        brand: '', model: '', year: '', category: 'Hatchback',
         seating_capacity: '', fuel_type: 'Petrol', transmission: 'Manual',
         pricePerDay: '', location: '', description: '',
       });
+      setImageFile(null);
       fetchMyCars();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to add car');
@@ -71,7 +93,7 @@ function OwnerDashboard() {
 
   const handleToggle = async (carId) => {
     try {
-      await axios.put(`http://localhost:5000/api/cars/toggle/${carId}`, {}, {
+      await axios.put(`${API_URL}/cars/toggle/${carId}`, {}, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success('Availability updated');
@@ -112,7 +134,15 @@ function OwnerDashboard() {
               />
             </div>
 
-            <input name="image" value={form.image} onChange={handleChange} placeholder="Image URL" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+            <div>
+              <label className="block text-sm text-gray-600 mb-1">Car Photo</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              />
+            </div>
 
             <div className="grid grid-cols-2 gap-3">
               <input name="year" type="number" value={form.year} onChange={handleChange} placeholder="Year" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
@@ -161,7 +191,9 @@ function OwnerDashboard() {
             {myCars.map((car) => (
               <div key={car._id} className="border border-gray-200 rounded-xl p-3 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">🚗</div>
+                  <div className="w-14 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center text-2xl">
+                    {car.image ? <img src={car.image} alt={car.model} className="w-full h-full object-cover" /> : '🚗'}
+                  </div>
                   <div>
                     <p className="font-medium text-gray-900 text-sm">{car.brand} {car.model}</p>
                     <p className="text-xs text-gray-500">₹{car.pricePerDay.toLocaleString('en-IN')}/day · {car.location}</p>

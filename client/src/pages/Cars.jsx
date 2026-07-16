@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 function Cars() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState('All Locations');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
 
   useEffect(() => {
     const fetchCars = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/cars/all');
+        const res = await axios.get(`${API_URL}/cars/all`);
         setCars(res.data.cars);
       } catch (error) {
         console.error('Error fetching cars:', error);
@@ -22,38 +21,21 @@ function Cars() {
     fetchCars();
   }, []);
 
-  const filteredCars = cars.filter((car) => {
-    const locationMatch =
-      selectedLocation === 'All Locations' || car.location === selectedLocation;
-    const categoryMatch =
-      selectedCategory === 'All Categories' || car.category === selectedCategory;
-    return locationMatch && categoryMatch;
-  });
-
   return (
     <div className="px-6 md:px-12 py-10">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">All Cars</h1>
       <p className="text-gray-500 mb-8">
-        {loading ? 'Loading cars...' : `Choose from ${filteredCars.length} cars available across India`}
+        {loading ? 'Loading cars...' : `Choose from ${cars.length} cars available across India`}
       </p>
 
       <div className="flex flex-wrap gap-3 mb-8">
-        <select
-          className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700"
-          value={selectedLocation}
-          onChange={(e) => setSelectedLocation(e.target.value)}
-        >
+        <select className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700">
           <option>All Locations</option>
           <option>Mumbai</option>
           <option>Delhi</option>
           <option>Bangalore</option>
-          <option>Indore</option>
         </select>
-        <select
-          className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700"
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
+        <select className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700">
           <option>All Categories</option>
           <option>Hatchback</option>
           <option>Sedan</option>
@@ -66,16 +48,16 @@ function Cars() {
         <p className="text-gray-400 text-center py-10">Loading cars...</p>
       )}
 
-      {!loading && filteredCars.length === 0 && (
+      {!loading && cars.length === 0 && (
         <div className="text-center py-16">
           <p className="text-4xl mb-2">🚗</p>
-          <p className="text-gray-500">No cars match your filters.</p>
+          <p className="text-gray-500">No cars available right now.</p>
         </div>
       )}
 
-      {!loading && filteredCars.length > 0 && (
+      {!loading && cars.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCars.map((car) => (
+          {cars.map((car) => (
             <Link to={`/cars/${car._id}`} key={car._id} className="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer">
               <div className="h-44 bg-gray-100 flex items-center justify-center text-5xl">
                 🚗

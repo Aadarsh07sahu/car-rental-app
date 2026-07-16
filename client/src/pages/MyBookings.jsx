@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 function MyBookings() {
   const { token } = useAuth();
@@ -10,7 +11,7 @@ function MyBookings() {
 
   const fetchBookings = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/bookings/user', {
+      const res = await axios.get(`${API_URL}/bookings/user`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBookings(res.data.bookings);
@@ -28,7 +29,7 @@ function MyBookings() {
   const handleCancel = async (bookingId) => {
     try {
       await axios.put(
-        `http://localhost:5000/api/bookings/cancel/${bookingId}`,
+        `${API_URL}/bookings/cancel/${bookingId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

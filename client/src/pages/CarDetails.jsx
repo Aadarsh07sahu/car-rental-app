@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { API_URL } from '../config';
 
 function CarDetails() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ function CarDetails() {
   useEffect(() => {
     const fetchCar = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/cars/${id}`);
+        const res = await axios.get(`${API_URL}/cars/${id}`);
         setCar(res.data.car);
       } catch (error) {
         console.error(error);
@@ -41,7 +42,7 @@ function CarDetails() {
     setBooking(true);
     try {
       await axios.post(
-        'http://localhost:5000/api/bookings/create',
+        `${API_URL}/bookings/create`,
         { carId: id, pickupDate, returnDate },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -67,7 +68,6 @@ function CarDetails() {
       <Link to="/cars" className="text-sm text-gray-500 hover:text-blue-600">← Back to Cars</Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-6">
-        {/* Left: Car Info */}
         <div>
           <div className="h-64 bg-gray-100 rounded-xl flex items-center justify-center text-7xl">
             🚗
@@ -101,7 +101,6 @@ function CarDetails() {
           </div>
         </div>
 
-        {/* Right: Booking Form */}
         <div className="border border-gray-200 rounded-xl p-6 h-fit">
           <p className="text-2xl font-bold text-gray-900">₹{car.pricePerDay.toLocaleString('en-IN')} <span className="text-sm font-normal text-gray-500">/ day</span></p>
 
