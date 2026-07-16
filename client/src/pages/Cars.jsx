@@ -59,9 +59,22 @@ function Cars() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => (
             <Link to={`/cars/${car._id}`} key={car._id} className="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200 cursor-pointer">
-              <div className="h-44 bg-gray-100 flex items-center justify-center text-5xl">
-                🚗
-              </div>
+              <div className="h-44 bg-gray-100 flex items-center justify-center text-5xl overflow-hidden">
+ {car.image ? (
+  <img
+    src={car.image}
+    alt={`${car.brand} ${car.model}`}
+    className="w-full h-full object-cover"
+    onError={(e) => {
+      e.target.style.display = 'none';
+      e.target.parentElement.innerHTML = '🚗';
+      e.target.parentElement.classList.add('text-5xl');
+    }}
+  />
+) : (
+  '🚗'
+)}
+</div>
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-gray-900">{car.brand} {car.model}</h3>

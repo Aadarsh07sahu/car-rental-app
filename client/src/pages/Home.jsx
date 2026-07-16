@@ -1,6 +1,26 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { API_URL } from '../config';
 
 function Home() {
+  const [featuredCars, setFeaturedCars] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeaturedCars = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/cars/all`);
+        setFeaturedCars(res.data.cars.slice(0, 4));
+      } catch (error) {
+        console.error('Error fetching featured cars:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeaturedCars();
+  }, []);
+
   return (
     <div>
       {/* Hero Section */}
@@ -29,25 +49,50 @@ function Home() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { brand: 'Maruti Suzuki Swift', location: 'Mumbai', price: 1500, seats: 5 },
-            { brand: 'Hyundai Creta', location: 'Delhi', price: 2800, seats: 5 },
-            { brand: 'Toyota Innova', location: 'Bangalore', price: 3200, seats: 7 },
-            { brand: 'Honda City', location: 'Pune', price: 2200, seats: 5 },
-          ].map((car, index) => (
-            <div key={index} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200">
-              <div className="h-40 bg-gray-100 flex items-center justify-center text-5xl">
-                🚗
-              </div>
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-900">{car.brand}</h3>
-                <p className="text-sm text-gray-500 mt-1">{car.location} · {car.seats} Seats</p>
-                <p className="mt-2 font-bold text-gray-900">₹{car.price.toLocaleString('en-IN')} <span className="text-sm font-normal text-gray-500">/ day</span></p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {loading && (
+          <p className="text-gray-400 text-center py-10">Loading cars...</p>
+        )}
+
+        {!loading && featuredCars.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-4xl mb-2">🚗</p>
+            <p className="text-gray-500">No cars available right now.</p>
+          </div>
+        )}
+
+        {!loading && featuredCars.length > 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featuredCars.map((car) => (
+              <Link
+                to={`/cars/${car._id}`}
+                key={car._id}
+                className="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200"
+              >
+                <div className="h-40 bg-gray-100 flex items-center justify-center text-5xl overflow-hidden">
+                  {car.image ? (
+                    <img
+                      src={car.image}
+                      alt={`${car.brand} ${car.model}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.innerHTML = '🚗';
+                        e.target.parentElement.classList.add('text-5xl');
+                      }}
+                    />
+                  ) : (
+                    '🚗'
+                  )}
+                </div>
+                <div className="p-4">
+                  <h3 className="font-semibold text-gray-900">{car.brand} {car.model}</h3>
+                  <p className="text-sm text-gray-500 mt-1">{car.location} · {car.seating_capacity} Seats</p>
+                  <p className="mt-2 font-bold text-gray-900">₹{car.pricePerDay.toLocaleString('en-IN')} <span className="text-sm font-normal text-gray-500">/ day</span></p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

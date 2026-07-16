@@ -69,9 +69,22 @@ function CarDetails() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-6">
         <div>
-          <div className="h-64 bg-gray-100 rounded-xl flex items-center justify-center text-7xl">
-            🚗
-          </div>
+         <div className="h-64 bg-gray-100 rounded-xl flex items-center justify-center text-7xl overflow-hidden">
+ {car.image ? (
+  <img
+    src={car.image}
+    alt={`${car.brand} ${car.model}`}
+    className="w-full h-full object-cover"
+    onError={(e) => {
+      e.target.style.display = 'none';
+      e.target.parentElement.innerHTML = '🚗';
+      e.target.parentElement.classList.add('text-5xl');
+    }}
+  />
+) : (
+  '🚗'
+)}
+</div>
 
           <h1 className="text-2xl font-bold text-gray-900 mt-6">{car.brand} {car.model}</h1>
           <p className="text-gray-500">{car.location} · {car.year}</p>
