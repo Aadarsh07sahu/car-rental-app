@@ -1,9 +1,10 @@
+import { API_URL } from "../config";
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import toast from "react-hot-toast";
 
-const API_URL = "http://localhost:5000/api";
+
 
 function Profile() {
  const { user, token, setUser } = useAuth();
