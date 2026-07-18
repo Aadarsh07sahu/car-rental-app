@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   res.send('Car Rental API is running');
 });
 
-app.use('/api/auth', userRouter);
+app.use('/api/users', userRouter);
 app.use('/api/cars', carRouter);
 app.use('/api/bookings', bookingRouter);
 
