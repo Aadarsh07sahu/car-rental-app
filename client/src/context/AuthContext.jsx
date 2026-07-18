@@ -1,8 +1,9 @@
 import { createContext, useState, useContext } from 'react';
 import axios from 'axios';
-import { API_URL } from '../config';
 
 const AuthContext = createContext();
+
+const API_URL = 'http://localhost:5000/api';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
@@ -12,7 +13,7 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
 
   const login = async (email, password) => {
-    const res = await axios.post(`${API_URL}/auth/login`, { email, password });
+    const res = await axios.post(`${API_URL}/users/login`, { email, password });
     setUser(res.data.user);
     setToken(res.data.token);
     localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -20,8 +21,8 @@ export function AuthProvider({ children }) {
     return res.data;
   };
 
-  const register = async (name, email, password, role) => {
-    const res = await axios.post(`${API_URL}/auth/register`, { name, email, password, role });
+  const register = async (userData) => {
+    const res = await axios.post(`${API_URL}/users/register`, userData);
     setUser(res.data.user);
     setToken(res.data.token);
     localStorage.setItem('user', JSON.stringify(res.data.user));
@@ -37,7 +38,16 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+   <AuthContext.Provider
+  value={{
+    user,
+    setUser,
+    token,
+    login,
+    register,
+    logout,
+  }}
+>
       {children}
     </AuthContext.Provider>
   );

@@ -7,11 +7,13 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import MyBookings from './pages/MyBookings';
 import OwnerDashboard from './pages/OwnerDashboard';
+import Profile from './pages/Profile';
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cars" element={<Cars />} />
@@ -20,6 +22,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/my-bookings" element={<MyBookings />} />
         <Route path="/dashboard" element={<OwnerDashboard />} />
+
+        {/* New Profile Route */}
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
