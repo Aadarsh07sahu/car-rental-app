@@ -18,6 +18,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/users', userRouter);
+app.delete('/test-delete', (req, res) => {
+  res.json({ message: 'DELETE works' });
+});
 app.use('/api/cars', carRouter);
 app.use('/api/bookings', bookingRouter);
 

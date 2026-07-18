@@ -12,6 +12,7 @@ function OwnerDashboard() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const [form, setForm] = useState({
     brand: '', model: '', year: '', category: 'Hatchback',
@@ -100,6 +101,26 @@ function OwnerDashboard() {
       fetchMyCars();
     } catch (error) {
       toast.error('Failed to update');
+    }
+  };
+
+  const handleDelete = async (carId) => {
+    const confirmed = window.confirm('Are you sure you want to delete this car?');
+    if (!confirmed) {
+      return;
+    }
+
+    setDeletingId(carId);
+    try {
+      await axios.delete(`${API_URL}/cars/delete/${carId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Car deleted successfully');
+      fetchMyCars();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete car');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -199,12 +220,21 @@ function OwnerDashboard() {
                     <p className="text-xs text-gray-500">₹{car.pricePerDay.toLocaleString('en-IN')}/day · {car.location}</p>
                   </div>
                 </div>
-                <button
-                  onClick={() => handleToggle(car._id)}
-                  className={`text-xs px-3 py-1.5 rounded-full font-medium ${car.isAvailable ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}
-                >
-                  {car.isAvailable ? 'Available' : 'Unavailable'}
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handleToggle(car._id)}
+                    className={`text-xs px-3 py-1.5 rounded-full font-medium ${car.isAvailable ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}
+                  >
+                    {car.isAvailable ? 'Available' : 'Unavailable'}
+                  </button>
+                  <button
+                    onClick={() => handleDelete(car._id)}
+                    disabled={deletingId === car._id}
+                    className="text-xs px-3 py-1.5 rounded-full font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 disabled:opacity-60"
+                  >
+                    {deletingId === car._id ? 'Deleting...' : 'Delete'}
+                  </button>
+                </div>
               </div>
             ))}
           </div>

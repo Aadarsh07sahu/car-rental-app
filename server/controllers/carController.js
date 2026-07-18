@@ -4,7 +4,18 @@ import cloudinary from '../configs/cloudinary.js';
 // ADD CAR (sirf logged-in user/owner)
 export const addCar = async (req, res) => {
   try {
-    const { brand, model, year, category, seating_capacity, fuel_type, transmission, pricePerDay, location, description } = req.body;
+    const {
+      brand,
+      model,
+      year,
+      category,
+      seating_capacity,
+      fuel_type,
+      transmission,
+      pricePerDay,
+      location,
+      description,
+    } = req.body;
 
     let imageUrl = req.body.image || '';
 
@@ -18,8 +29,10 @@ export const addCar = async (req, res) => {
             else resolve(result);
           }
         );
+
         stream.end(req.file.buffer);
       });
+
       imageUrl = uploadResult.secure_url;
     }
 
@@ -38,10 +51,16 @@ export const addCar = async (req, res) => {
       description,
     });
 
-    res.status(201).json({ success: true, car });
+    res.status(201).json({
+      success: true,
+      car,
+    });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -49,10 +68,17 @@ export const addCar = async (req, res) => {
 export const getAllCars = async (req, res) => {
   try {
     const cars = await Car.find({ isAvailable: true });
-    res.status(200).json({ success: true, cars });
+
+    res.status(200).json({
+      success: true,
+      cars,
+    });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -60,33 +86,87 @@ export const getAllCars = async (req, res) => {
 export const getMyCars = async (req, res) => {
   try {
     const cars = await Car.find({ owner: req.user._id });
-    res.status(200).json({ success: true, cars });
+
+    res.status(200).json({
+      success: true,
+      cars,
+    });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
-// TOGGLE AVAILABILITY (car ko available/unavailable karna)
+// TOGGLE AVAILABILITY
 export const toggleCarAvailability = async (req, res) => {
   try {
     const car = await Car.findById(req.params.id);
 
     if (!car) {
-      return res.status(404).json({ success: false, message: 'Car not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Car not found',
+      });
     }
 
     if (car.owner.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ success: false, message: 'Not authorized' });
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized',
+      });
     }
 
     car.isAvailable = !car.isAvailable;
+
     await car.save();
 
-    res.status(200).json({ success: true, car });
+    res.status(200).json({
+      success: true,
+      car,
+    });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// DELETE CAR
+export const deleteCar = async (req, res) => {
+  try {
+    const car = await Car.findById(req.params.id);
+
+    if (!car) {
+      return res.status(404).json({
+        success: false,
+        message: 'Car not found',
+      });
+    }
+
+    if (car.owner.toString() !== req.user._id.toString()) {
+      return res.status(403).json({
+        success: false,
+        message: 'Not authorized',
+      });
+    }
+
+    await Car.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      message: 'Car deleted successfully',
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
@@ -94,12 +174,23 @@ export const toggleCarAvailability = async (req, res) => {
 export const getCarById = async (req, res) => {
   try {
     const car = await Car.findById(req.params.id);
+
     if (!car) {
-      return res.status(404).json({ success: false, message: 'Car not found' });
+      return res.status(404).json({
+        success: false,
+        message: 'Car not found',
+      });
     }
-    res.status(200).json({ success: true, car });
+
+    res.status(200).json({
+      success: true,
+      car,
+    });
 
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
   }
 };
