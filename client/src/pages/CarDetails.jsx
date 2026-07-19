@@ -16,6 +16,17 @@ function CarDetails() {
   const [returnDate, setReturnDate] = useState('');
   const [booking, setBooking] = useState(false);
 
+  const today = new Date().toISOString().split('T')[0];
+
+  const calculateDays = () => {
+    if (!pickupDate || !returnDate) return 0;
+    const days = Math.ceil((new Date(returnDate) - new Date(pickupDate)) / (1000 * 60 * 60 * 24));
+    return Math.max(1, days);
+  };
+
+  const totalDays = calculateDays();
+  const estimatedTotal = car && pickupDate && returnDate ? totalDays * car.pricePerDay : 0;
+
   useEffect(() => {
     const fetchCar = async () => {
       try {
@@ -123,6 +134,7 @@ function CarDetails() {
               <input
                 type="date"
                 value={pickupDate}
+                min={today}
                 onChange={(e) => setPickupDate(e.target.value)}
                 className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
@@ -133,11 +145,22 @@ function CarDetails() {
               <input
                 type="date"
                 value={returnDate}
+                min={pickupDate || today}
                 onChange={(e) => setReturnDate(e.target.value)}
                 className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 required
               />
             </div>
+
+            {pickupDate && returnDate && (
+              <div className="bg-blue-50 rounded-lg p-4 flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-gray-600">{totalDays} {totalDays === 1 ? 'day' : 'days'}</p>
+                  <p className="text-xs text-gray-400">₹{car.pricePerDay.toLocaleString('en-IN')} × {totalDays}</p>
+                </div>
+                <p className="text-xl font-bold text-gray-900">₹{estimatedTotal.toLocaleString('en-IN')}</p>
+              </div>
+            )}
 
             <button
               type="submit"

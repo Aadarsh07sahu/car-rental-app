@@ -22,13 +22,28 @@ export const createBooking = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Car not found' });
     }
 
+    // Pickup date aaj ya future mein honi chahiye
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const pickup = new Date(pickupDate);
+    const returnD = new Date(returnDate);
+
+    if (pickup < today) {
+      return res.status(400).json({ success: false, message: 'Pickup date cannot be in the past' });
+    }
+
+    // Return date, pickup date se pehle nahi honi chahiye
+    if (returnD < pickup) {
+      return res.status(400).json({ success: false, message: 'Return date cannot be before pickup date' });
+    }
+
     const available = await isCarAvailable(carId, pickupDate, returnDate);
     if (!available) {
       return res.status(400).json({ success: false, message: 'Car is not available for these dates' });
     }
 
-    // Total din calculate karo
-    const days = Math.ceil((new Date(returnDate) - new Date(pickupDate)) / (1000 * 60 * 60 * 24));
+    // Total din calculate karo (minimum 1 din charge hoga, chahe same-day booking ho)
+    const days = Math.max(1, Math.ceil((new Date(returnDate) - new Date(pickupDate)) / (1000 * 60 * 60 * 24)));
     const totalPrice = days * car.pricePerDay;
 
     const booking = await Booking.create({
