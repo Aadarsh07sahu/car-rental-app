@@ -133,11 +133,11 @@ function OwnerDashboard() {
   }
 
   return (
-    <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto">
+    <div className="px-6 md:px-12 py-10 max-w-6xl mx-auto bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Owner Dashboard</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-        <div>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Add New Car</h2>
           <form onSubmit={handleSubmit} className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
@@ -161,56 +161,56 @@ function OwnerDashboard() {
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-full file:border-0 file:bg-orange-50 file:text-orange-600 file:text-sm file:font-medium hover:file:bg-orange-100 file:transition-colors file:duration-200"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <input name="year" type="number" value={form.year} onChange={handleChange} placeholder="Year" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
-              <input name="location" value={form.location} onChange={handleChange} placeholder="Location (e.g. Mumbai)" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+              <input name="year" type="number" value={form.year} onChange={handleChange} placeholder="Year" className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200" required />
+              <input name="location" value={form.location} onChange={handleChange} placeholder="Location (e.g. Mumbai)" className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200" required />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <select name="category" value={form.category} onChange={handleChange} className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <select name="category" value={form.category} onChange={handleChange} className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200">
                 <option>Hatchback</option>
                 <option>Sedan</option>
                 <option>SUV</option>
                 <option>MUV</option>
               </select>
-              <input name="seating_capacity" type="number" value={form.seating_capacity} onChange={handleChange} placeholder="Seats" className="border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+              <input name="seating_capacity" type="number" value={form.seating_capacity} onChange={handleChange} placeholder="Seats" className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200" required />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <select name="fuel_type" value={form.fuel_type} onChange={handleChange} className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <select name="fuel_type" value={form.fuel_type} onChange={handleChange} className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200">
                 <option>Petrol</option>
                 <option>Diesel</option>
                 <option>Electric</option>
                 <option>CNG</option>
               </select>
-              <select name="transmission" value={form.transmission} onChange={handleChange} className="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+              <select name="transmission" value={form.transmission} onChange={handleChange} className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200">
                 <option>Manual</option>
                 <option>Automatic</option>
               </select>
             </div>
 
-            <input name="pricePerDay" type="number" value={form.pricePerDay} onChange={handleChange} placeholder="Price per day (₹)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+            <input name="pricePerDay" type="number" value={form.pricePerDay} onChange={handleChange} placeholder="Price per day (₹)" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200" required />
 
-            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Short description" rows="3" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" required />
+            <textarea name="description" value={form.description} onChange={handleChange} placeholder="Short description" rows="3" className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200" required />
 
-            <button type="submit" disabled={submitting} className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-60">
+            <button type="submit" disabled={submitting} className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-60">
               {submitting ? 'Adding...' : 'Add Car'}
             </button>
           </form>
         </div>
 
-        <div>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">My Cars</h2>
           {loading && <p className="text-gray-400">Loading...</p>}
           {!loading && myCars.length === 0 && <p className="text-gray-500">You haven't added any car yet.</p>}
 
           <div className="space-y-3">
             {myCars.map((car) => (
-              <div key={car._id} className="border border-gray-200 rounded-xl p-3 flex items-center justify-between">
+              <div key={car._id} className="border border-gray-100 rounded-xl p-3 flex items-center justify-between hover:shadow-md transition-shadow duration-200">
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center text-2xl">
                     {car.image ? <img src={car.image} alt={car.model} className="w-full h-full object-cover" /> : '🚗'}
@@ -223,14 +223,14 @@ function OwnerDashboard() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleToggle(car._id)}
-                    className={`text-xs px-3 py-1.5 rounded-full font-medium ${car.isAvailable ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}
+                    className={`text-xs px-3 py-1.5 rounded-full font-medium transition-colors duration-200 ${car.isAvailable ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}
                   >
                     {car.isAvailable ? 'Available' : 'Unavailable'}
                   </button>
                   <button
                     onClick={() => handleDelete(car._id)}
                     disabled={deletingId === car._id}
-                    className="text-xs px-3 py-1.5 rounded-full font-medium bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 disabled:opacity-60"
+                    className="text-xs px-3 py-1.5 rounded-full font-medium bg-red-500 text-white hover:bg-red-600 transition-colors duration-200 disabled:opacity-60"
                   >
                     {deletingId === car._id ? 'Deleting...' : 'Delete'}
                   </button>

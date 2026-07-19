@@ -45,8 +45,8 @@ function Cars() {
   });
 
   return (
-    <div className="px-6 md:px-12 py-10">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+    <div className="px-6 md:px-12 py-10 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 tracking-tight">
         All Cars
       </h1>
 
@@ -61,7 +61,7 @@ function Cars() {
         <select
           value={selectedLocation}
           onChange={(e) => setSelectedLocation(e.target.value)}
-          className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700"
+          className="border border-gray-200 bg-white rounded-lg px-4 py-2.5 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
         >
           {locations.map((location) => (
             <option key={location} value={location}>
@@ -73,7 +73,7 @@ function Cars() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700"
+          className="border border-gray-200 bg-white rounded-lg px-4 py-2.5 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
         >
           <option>All Categories</option>
           <option>Hatchback</option>
@@ -87,7 +87,7 @@ function Cars() {
             setSelectedLocation('All Locations');
             setSelectedCategory('All Categories');
           }}
-          className="border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+          className="border border-gray-200 bg-white rounded-lg px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm hover:bg-orange-50 hover:text-orange-600 hover:border-orange-200 transition-all duration-200"
         >
           Reset Filters
         </button>
@@ -114,7 +114,7 @@ function Cars() {
             <Link
               key={car._id}
               to={`/cars/${car._id}`}
-              className="block border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200"
+              className="block bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
             >
               <div className="h-44 bg-gray-100 flex items-center justify-center text-5xl overflow-hidden">
                 {car.image ? (
@@ -139,7 +139,7 @@ function Cars() {
                     {car.brand} {car.model}
                   </h3>
 
-                  <span className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-medium">
+                  <span className="text-xs bg-orange-50 text-orange-600 px-2.5 py-1 rounded-full font-medium">
                     {car.category}
                   </span>
                 </div>

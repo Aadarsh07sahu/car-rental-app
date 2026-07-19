@@ -25,8 +25,8 @@ function Login() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-6">
-      <div className="w-full max-w-sm">
+    <div className="min-h-[80vh] flex items-center justify-center px-6 bg-gray-50">
+      <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300 p-8 border border-gray-100">
         <h1 className="text-2xl font-bold text-gray-900 text-center mb-1">Welcome back</h1>
         <p className="text-gray-500 text-center mb-8">Login to continue booking cars</p>
 
@@ -38,7 +38,7 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
               required
             />
           </div>
@@ -50,7 +50,7 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter your password"
-              className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
               required
             />
           </div>
@@ -58,7 +58,7 @@ function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-60"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 disabled:opacity-60"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -66,7 +66,7 @@ function Login() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Don't have an account?{' '}
-          <Link to="/register" className="text-blue-600 font-medium hover:underline">
+          <Link to="/register" className="text-orange-500 font-medium hover:underline">
             Sign up
           </Link>
         </p>

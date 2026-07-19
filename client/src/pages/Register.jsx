@@ -57,9 +57,9 @@ function Register() {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-6 py-10">
-      <div className="w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-gray-900 text-center mb-1">Create account</h1>
+    <div className="min-h-[80vh] flex items-center justify-center px-6 py-10 bg-gray-50">
+      <div className="w-full max-w-sm bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <h1 className="text-2xl font-bold text-gray-900 text-center mb-1 tracking-tight">Create account</h1>
         <p className="text-gray-500 text-center mb-8">Sign up to start renting cars</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -71,7 +71,7 @@ function Register() {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="First name"
-                className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
                 required
               />
             </div>
@@ -82,7 +82,7 @@ function Register() {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Last name"
-                className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
                 required
               />
             </div>
@@ -97,7 +97,7 @@ function Register() {
               placeholder="Enter 10-digit phone number"
               maxLength={10}
               inputMode="numeric"
-              className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
               required
             />
             {phone.length > 0 && phone.length < 10 && (
@@ -112,7 +112,7 @@ function Register() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-1 w-full border border-gray-200 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
               required
             />
           </div>
@@ -125,7 +125,7 @@ function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
-                className="mt-1 w-full border border-gray-300 rounded-lg px-4 py-2.5 pr-11 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full border border-gray-200 rounded-lg px-4 py-2.5 pr-11 focus:outline-none focus:ring-2 focus:ring-orange-400 transition-shadow duration-200"
                 required
               />
               <button
@@ -157,10 +157,10 @@ function Register() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 placeholder="Re-enter your password"
-                className={`mt-1 w-full border rounded-lg px-4 py-2.5 pr-11 focus:outline-none focus:ring-2 ${
+                className={`mt-1 w-full border rounded-lg px-4 py-2.5 pr-11 focus:outline-none focus:ring-2 transition-shadow duration-200 ${
                   passwordsMismatch
                     ? 'border-red-400 focus:ring-red-400'
-                    : 'border-gray-300 focus:ring-blue-500'
+                    : 'border-gray-200 focus:ring-orange-400'
                 }`}
                 required
               />
@@ -194,8 +194,8 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setRole('user')}
-                className={`border rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 ${
-                  role === 'user' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-300 text-gray-600'
+                className={`border rounded-lg py-2.5 text-sm font-medium transition-all duration-200 ${
+                  role === 'user' ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-gray-200 text-gray-600 hover:border-orange-200'
                 }`}
               >
                 Rent a car
@@ -203,8 +203,8 @@ function Register() {
               <button
                 type="button"
                 onClick={() => setRole('owner')}
-                className={`border rounded-lg py-2.5 text-sm font-medium transition-colors duration-200 ${
-                  role === 'owner' ? 'border-blue-600 bg-blue-50 text-blue-600' : 'border-gray-300 text-gray-600'
+                className={`border rounded-lg py-2.5 text-sm font-medium transition-all duration-200 ${
+                  role === 'owner' ? 'border-orange-500 bg-orange-50 text-orange-600' : 'border-gray-200 text-gray-600 hover:border-orange-200'
                 }`}
               >
                 List my car
@@ -215,7 +215,7 @@ function Register() {
           <button
             type="submit"
             disabled={loading || passwordsMismatch}
-            className="w-full bg-blue-600 text-white font-medium py-2.5 rounded-lg hover:bg-blue-700 transition-colors duration-200 disabled:opacity-60"
+            className="w-full bg-orange-500 text-white font-semibold py-2.5 rounded-lg hover:bg-orange-600 transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-60"
           >
             {loading ? 'Creating account...' : 'Sign Up'}
           </button>
@@ -223,7 +223,7 @@ function Register() {
 
         <p className="text-center text-sm text-gray-500 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-blue-600 font-medium hover:underline">
+          <Link to="/login" className="text-orange-500 font-medium hover:text-orange-600 hover:underline">
             Login
           </Link>
         </p>
