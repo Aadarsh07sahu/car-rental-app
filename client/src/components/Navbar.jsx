@@ -1,17 +1,30 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [open, setOpen] = useState(false);
+
+  const isLoginPage = location.pathname === '/login';
 
   const handleLogout = () => {
     logout();
     navigate('/');
   };
+
+  const navLinkClass = ({ isActive }) =>
+    `relative pb-1 hover:text-orange-500 transition-colors duration-200 ${
+      isActive ? 'text-orange-500' : 'text-gray-600'
+    }`;
+
+  const underlineClass = (isActive) =>
+    `absolute left-0 -bottom-1 h-0.5 w-full bg-orange-500 transform transition-transform duration-300 ease-out origin-left ${
+      isActive ? 'scale-x-100' : 'scale-x-0'
+    }`;
 
   return (
     <nav className="sticky top-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -27,38 +40,46 @@ function Navbar() {
 
       {/* Navigation */}
 
-      <div className="hidden md:flex items-center gap-10 text-sm font-medium text-gray-600">
+      <div className="hidden md:flex items-center gap-10 text-sm font-medium">
 
-        <Link
-          to="/"
-          className="hover:text-orange-500 transition-colors duration-200"
-        >
-          Home
-        </Link>
+        <NavLink to="/" end className={navLinkClass}>
+          {({ isActive }) => (
+            <>
+              Home
+              <span className={underlineClass(isActive)} />
+            </>
+          )}
+        </NavLink>
 
-        <Link
-          to="/cars"
-          className="hover:text-orange-500 transition-colors duration-200"
-        >
-          Cars
-        </Link>
+        <NavLink to="/cars" className={navLinkClass}>
+          {({ isActive }) => (
+            <>
+              Cars
+              <span className={underlineClass(isActive)} />
+            </>
+          )}
+        </NavLink>
 
         {user && (
-          <Link
-            to="/my-bookings"
-            className="hover:text-orange-500 transition-colors duration-200"
-          >
-            My Bookings
-          </Link>
+          <NavLink to="/my-bookings" className={navLinkClass}>
+            {({ isActive }) => (
+              <>
+                My Bookings
+                <span className={underlineClass(isActive)} />
+              </>
+            )}
+          </NavLink>
         )}
 
         {user?.role === 'owner' && (
-          <Link
-            to="/dashboard"
-            className="hover:text-orange-500 transition-colors duration-200"
-          >
-            Dashboard
-          </Link>
+          <NavLink to="/dashboard" className={navLinkClass}>
+            {({ isActive }) => (
+              <>
+                Dashboard
+                <span className={underlineClass(isActive)} />
+              </>
+            )}
+          </NavLink>
         )}
 
       </div>
@@ -66,18 +87,33 @@ function Navbar() {
       {/* Right Side */}
 
       {!user ? (
-        <div className="flex items-center gap-3">
+        <div className="relative flex items-center bg-gray-100 rounded-full p-1">
 
-          <Link to="/login">
-            <button className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-orange-500 transition-colors duration-200">
-              Login
-            </button>
+          {/* Sliding highlight */}
+          <div
+            className={`absolute top-1 bottom-1 rounded-full bg-orange-500 shadow-sm transition-all duration-300 ease-out ${
+              isLoginPage
+                ? 'left-1 w-[calc(50%-6px)]'
+                : 'left-[calc(50%+2px)] w-[calc(50%-6px)]'
+            }`}
+          />
+
+          <Link
+            to="/login"
+            className={`relative z-10 flex-1 text-center px-5 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
+              isLoginPage ? 'text-white' : 'text-gray-600 hover:text-orange-500'
+            }`}
+          >
+            Login
           </Link>
 
-          <Link to="/register">
-            <button className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-medium px-5 py-2.5 rounded-full shadow-sm hover:shadow-md transition-all duration-200">
-              Sign Up
-            </button>
+          <Link
+            to="/register"
+            className={`relative z-10 flex-1 text-center px-5 py-2 text-sm font-medium rounded-full transition-colors duration-200 ${
+              !isLoginPage ? 'text-white' : 'text-gray-600 hover:text-orange-500'
+            }`}
+          >
+            Sign Up
           </Link>
 
         </div>
