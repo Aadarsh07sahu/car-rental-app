@@ -58,7 +58,7 @@ function Footer() {
       <div className="border-t border-gray-800">
         <div className="max-w-6xl mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-500">
           <p>© {new Date().getFullYear()} DriveIndia. All Rights Reserved.</p>
-          <p>Built with the MONGO DB | EXPRESS | REACT | NODE JS | Cloudinary | Vercel | Render</p>
+          <p>Built with the MongoDB | Express | React | Node.js | Cloudinary | Vercel | Render</p>
         </div>
       </div>
     </footer>
