@@ -76,6 +76,21 @@ export const getUserBookings = async (req, res) => {
   }
 };
 
+// GET BOOKINGS FOR OWNER'S CARS (logged-in owner)
+export const getOwnerBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({ owner: req.user._id })
+      .populate('car')
+      .populate('user', 'firstName lastName email phone')
+      .sort({ createdAt: -1 });
+
+    res.status(200).json({ success: true, bookings });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 // CANCEL BOOKING (logged-in user)
 export const cancelBooking = async (req, res) => {
   try {

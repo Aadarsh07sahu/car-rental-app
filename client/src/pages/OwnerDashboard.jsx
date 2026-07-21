@@ -14,6 +14,9 @@ function OwnerDashboard() {
   const [imageFile, setImageFile] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
+  const [bookings, setBookings] = useState([]);
+  const [bookingsLoading, setBookingsLoading] = useState(true);
+
   const [form, setForm] = useState({
     brand: '', model: '', year: '', category: 'Hatchback',
     seating_capacity: '', fuel_type: 'Petrol', transmission: 'Manual',
@@ -35,8 +38,24 @@ function OwnerDashboard() {
     }
   };
 
+  const fetchBookingRequests = async () => {
+    try {
+      const res = await axios.get(`${API_URL}/bookings/owner`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBookings(res.data.bookings);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setBookingsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (token) fetchMyCars();
+    if (token) {
+      fetchMyCars();
+      fetchBookingRequests();
+    }
   }, [token]);
 
   const handleChange = (e) => {
@@ -122,6 +141,13 @@ function OwnerDashboard() {
     } finally {
       setDeletingId(null);
     }
+  };
+
+  const statusColor = {
+    pending: 'bg-yellow-50 text-yellow-600',
+    confirmed: 'bg-green-50 text-green-600',
+    cancelled: 'bg-red-50 text-red-600',
+    completed: 'bg-blue-50 text-blue-600',
   };
 
   if (!user) {
@@ -238,6 +264,49 @@ function OwnerDashboard() {
               </div>
             ))}
           </div>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mt-10">
+        <h2 className="text-xl font-semibold text-gray-900 mb-4">Booking Requests</h2>
+        {bookingsLoading && <p className="text-gray-400">Loading...</p>}
+        {!bookingsLoading && bookings.length === 0 && (
+          <p className="text-gray-500">No one has booked your cars yet.</p>
+        )}
+
+        <div className="space-y-3">
+          {bookings.map((booking) => (
+            <div key={booking._id} className="border border-gray-100 rounded-xl p-4 flex items-center justify-between hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center gap-3">
+                <div className="w-14 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center text-2xl">
+                  {booking.car?.image ? (
+                    <img src={booking.car.image} alt={booking.car.model} className="w-full h-full object-cover" />
+                  ) : (
+                    '🚗'
+                  )}
+                </div>
+                <div>
+                  <p className="font-medium text-gray-900 text-sm">
+                    {booking.car?.brand} {booking.car?.model}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {booking.user?.firstName} {booking.user?.lastName} · {new Date(booking.pickupDate).toLocaleDateString('en-IN')} - {new Date(booking.returnDate).toLocaleDateString('en-IN')}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {booking.user?.email} {booking.user?.phone ? `· ${booking.user.phone}` : ''}
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-col items-end gap-1">
+                <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${statusColor[booking.status]}`}>
+                  {booking.status}
+                </span>
+                <p className="text-sm font-semibold text-gray-900">
+                  ₹{booking.totalPrice.toLocaleString('en-IN')}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
