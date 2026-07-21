@@ -18,11 +18,21 @@ function Footer() {
           </p>
           <p className="text-sm text-white font-medium mt-4">Built by Aadarsh Sahu</p>
           <div className="flex items-center gap-3 mt-2 text-sm">
-            <a href="https://www.linkedin.com/in/aadarsh-sahu-b51856280/" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-colors duration-200">
-  LinkedIn
-</a>
+            <a 
+              href="https://www.linkedin.com/in/aadarsh-sahu-b51856280/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-orange-400 hover:text-orange-300 transition-colors duration-200"
+            >
+              LinkedIn
+            </a>
             <span className="text-gray-600">|</span>
-            <a href="https://github.com/Aadarsh07sahu/car-rental-app" target="_blank" rel="noopener noreferrer" className="text-orange-400 hover:text-orange-300 transition-colors duration-200">
+            <a 
+              href="https://github.com/Aadarsh07sahu/car-rental-app" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-orange-400 hover:text-orange-300 transition-colors duration-200"
+            >
               GitHub
             </a>
           </div>
@@ -56,9 +66,26 @@ function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-gray-800">
-        <div className="max-w-6xl mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-gray-500">
-          <p>© {new Date().getFullYear()} DriveIndia. All Rights Reserved.</p>
-          <p>Built with the MongoDB | Express | React | Node.js | Cloudinary | Vercel | Render</p>
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-5 flex flex-col md:flex-row items-center md:items-start justify-between gap-3 text-xs text-gray-500">
+          
+          {/* Left side: Copyright (with relative positioning for the flag stack) */}
+          <div className="relative flex flex-col items-center md:items-start">
+            <p className="mb-0">© {new Date().getFullYear()} DriveIndia. All Rights Reserved.</p>
+            
+            {/* Flag & India - positioned absolutely to sit under copyright without shifting layout */}
+            <div className="absolute top-4 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 flex items-center gap-1.5 mt-1">
+              <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="India Flag" className="w-4 h-3 object-cover rounded-sm" />
+              <span>India</span>
+            </div>
+            
+            {/* Placeholder space for the absolute content so footer height is correct */}
+            <div className="h-5 mt-1"></div>
+          </div>
+
+          {/* Right side: Tech Stack (Perfectly aligned on the right) */}
+          <p className="text-center md:text-right mt-2 md:mt-0">
+            Built with MongoDB | Express | React | Node.js | Cloudinary | Vercel | Render
+          </p>
         </div>
       </div>
     </footer>
