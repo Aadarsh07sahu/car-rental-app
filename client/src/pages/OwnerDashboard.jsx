@@ -16,6 +16,7 @@ function OwnerDashboard() {
 
   const [bookings, setBookings] = useState([]);
   const [bookingsLoading, setBookingsLoading] = useState(true);
+  const [actionLoadingId, setActionLoadingId] = useState(null);
 
   const [form, setForm] = useState({
     brand: '', model: '', year: '', category: 'Hatchback',
@@ -143,10 +144,41 @@ function OwnerDashboard() {
     }
   };
 
+  const handleAccept = async (bookingId) => {
+    setActionLoadingId(bookingId);
+    try {
+      await axios.put(`${API_URL}/bookings/accept/${bookingId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Booking accepted');
+      fetchBookingRequests();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to accept booking');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleReject = async (bookingId) => {
+    setActionLoadingId(bookingId);
+    try {
+      await axios.put(`${API_URL}/bookings/reject/${bookingId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success('Booking rejected');
+      fetchBookingRequests();
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to reject booking');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
   const statusColor = {
     pending: 'bg-yellow-50 text-yellow-600',
     confirmed: 'bg-green-50 text-green-600',
     cancelled: 'bg-red-50 text-red-600',
+    rejected: 'bg-red-50 text-red-600',
     completed: 'bg-blue-50 text-blue-600',
   };
 
@@ -297,13 +329,31 @@ function OwnerDashboard() {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-1">
+              <div className="flex flex-col items-end gap-2">
                 <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${statusColor[booking.status]}`}>
                   {booking.status}
                 </span>
                 <p className="text-sm font-semibold text-gray-900">
                   ₹{booking.totalPrice.toLocaleString('en-IN')}
                 </p>
+                {booking.status === 'pending' && (
+                  <div className="flex gap-2 mt-1">
+                    <button
+                      onClick={() => handleAccept(booking._id)}
+                      disabled={actionLoadingId === booking._id}
+                      className="text-xs px-3 py-1.5 rounded-full font-medium bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 disabled:opacity-60"
+                    >
+                      {actionLoadingId === booking._id ? '...' : 'Accept'}
+                    </button>
+                    <button
+                      onClick={() => handleReject(booking._id)}
+                      disabled={actionLoadingId === booking._id}
+                      className="text-xs px-3 py-1.5 rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors duration-200 disabled:opacity-60"
+                    >
+                      {actionLoadingId === booking._id ? '...' : 'Reject'}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}

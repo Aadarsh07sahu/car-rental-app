@@ -44,6 +44,7 @@ function MyBookings() {
     pending: 'bg-yellow-50 text-yellow-600',
     confirmed: 'bg-green-50 text-green-600',
     cancelled: 'bg-red-50 text-red-600',
+    rejected: 'bg-red-50 text-red-600',
     completed: 'bg-orange-50 text-orange-600',
   };
 
@@ -92,7 +93,7 @@ function MyBookings() {
               <span className={`text-xs px-3 py-1 rounded-full font-medium capitalize ${statusColor[b.status]}`}>
                 {b.status}
               </span>
-              {b.status !== 'cancelled' && (
+              {b.status !== 'cancelled' && b.status !== 'rejected' && (
                 <button
                   onClick={() => handleCancel(b._id)}
                   className="text-sm text-red-600 hover:underline"
